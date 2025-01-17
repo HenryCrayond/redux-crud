@@ -3,11 +3,11 @@ import ReactDom from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux'
 
 import '../style.css';
-import { handleChangeInput, handleCancel, handleAddParticipant } from '../../slice/participantSlice';
+import { handleChangeInput, handleCancel, handleAddParticipant, handleValidation } from '../../slice/participantSlice';
 
 export const Modal = (props) => {
     const { open, handleClose } = props;
-    const { addParticipant } = useSelector((state) => state.participant)
+    const { addParticipant, validationErrors } = useSelector((state) => state.participant)
 
     const dispatch = useDispatch()
 
@@ -16,8 +16,10 @@ export const Modal = (props) => {
         handleClose()
     }
     const saveModal = () => {
-        dispatch(handleAddParticipant())
-        handleClose()
+        if (addParticipant.name && addParticipant.email) {
+            dispatch(handleAddParticipant());
+            handleClose();
+        }
     }
 
     if (!open) return null
@@ -25,18 +27,18 @@ export const Modal = (props) => {
         <div className='modal-overlay'>
             <div className='modal-root'>
                 <div className='modal-header'>
-                    <h3>Add Participant</h3>
+                    <h3>{addParticipant?.id ? "Edit Participant" : 'Add Participant'}</h3>
                     <button className='close-btn' onClick={handleClose}>x</button>
                 </div>
 
                 <div className='modal-body'>
-                    <div style={{ marginBottom: 16 }}>
-                        <label title='Participant name' />
-                        <input placeholder='Enter name' value={addParticipant.name} onChange={(e) => dispatch(handleChangeInput({ field: 'name', value: e.target.value }))} />
+                    <div style={{ marginBottom: 24 }}>
+                        <input placeholder='Enter name' value={addParticipant?.name} onChange={(e) => dispatch(handleChangeInput({ field: 'name', value: e.target.value }))} />
+                        {validationErrors?.name && <p className='error-msg'>{validationErrors?.name}</p>}
                     </div>
-                    <div style={{ marginBottom: 16 }}>
-                        <label title='Email' />
-                        <input placeholder='Enter Email' value={addParticipant.email} onChange={(e) => dispatch(handleChangeInput({ field: 'email', value: e.target.value }))} />
+                    <div style={{ marginBottom: 16, position: "relative" }}>
+                        <input placeholder='Enter Email' value={addParticipant?.email} onChange={(e) => dispatch(handleChangeInput({ field: 'email', value: e.target.value }))} />
+                        {validationErrors?.email && <p className='error-msg'>{validationErrors?.email}</p>}
                     </div>
                 </div>
 

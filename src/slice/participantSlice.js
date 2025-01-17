@@ -14,6 +14,11 @@ const initialState = {
         name: "",
         email: ""
     },
+    validationErrors: {
+        name: '',
+        email: '',
+        isValid: null
+    }
 
 }
 
@@ -29,7 +34,7 @@ const participantSlice = createSlice({
         },
 
         handleAddParticipant: (state) => {
-            const val = state.addParticipant
+            const val = state.addParticipant;
             if (val.id) {
                 const index = state.participantList.findIndex(p => p.id === val.id);
                 if (index !== -1) {
@@ -37,7 +42,7 @@ const participantSlice = createSlice({
                 }
             } else {
                 const newParticipant = { id: new Date().toLocaleString(), ...val };
-                state.participantList = [newParticipant, ...state.participantList];
+                state.participantList.unshift(newParticipant);
             }
         },
 
@@ -48,16 +53,46 @@ const participantSlice = createSlice({
 
         handleDelete: (state, action) => {
             const { del } = action.payload;
-            let deleted = state.participantList?.filter((item) => item.id !== del.id)
-            state.participantList = deleted
+            state.participantList = state.participantList.filter(item => item.id !== del.id);
         },
+
+        handleValidation: (state) => {
+            const { name, email } = state.addParticipant;
+            let isValid = null;
+            let nameError = '';
+            let emailError = '';
+
+            if (name && email) return isValid
+
+            if (!name.trim()) {
+                isValid = false;
+                nameError = 'Name is required';
+            }
+
+            if (!email.trim()) {
+                isValid = false;
+                emailError = 'Email is required';
+            } else if (!/\S+@\S+\.\S+/.test(email)) {
+                isValid = false;
+                emailError = 'Email is not valid';
+            } else if (/\S+@\S+\.\S+/.test(email) && name.trim()) {
+                isValid = true;
+                nameError = '';
+                emailError = '';
+            }
+
+            state.validationErrors = { name: nameError, email: emailError,isValid:isValid };
+
+        },
+
 
         handleCancel: (state) => {
             state.addParticipant = { email: "", name: "" };
+            state.validationErrors = { name: '', email: '', isValid: false };
         }
 
     }
 })
 
-export const { handleChangeInput, handleCancel, handleAddParticipant, handleEdit, handleDelete } = participantSlice.actions
+export const { handleChangeInput, handleCancel, handleValidation, handleAddParticipant, handleEdit, handleDelete } = participantSlice.actions
 export default participantSlice.reducer

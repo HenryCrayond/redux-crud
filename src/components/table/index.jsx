@@ -28,7 +28,7 @@ const ParticipantTable = (props) => {
                     {
                         rowData && rowData.length > 0 && rowData?.map((row, i) => (
                             <tr className='row-item' >
-                                <td >{i}</td>
+                                <td >{i+1}</td>
                                 <td>{row.name}</td>
                                 <td>{row.email}</td>
                                 <td><button className='outline-btn' onClick={()=>handleRowEdit(row)}>Edit</button></td>
