@@ -1,0 +1,43 @@
+.App {
+  text-align: center;
+}
+.app-nav h2{
+  margin: 0;
+}
+
+.app-nav{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: cadetblue;
+  color: aliceblue;
+  font-size: 16px;
+  flex-wrap: wrap;
+  gap:12px
+}
+
+.contained-btn-add {
+  background-color: #fff;
+  padding: 12px 24px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  width: max-content;
+  font-weight: 600;
+}
+.outline-btn {
+  border-color: cadetblue;
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: 1px solid;
+  cursor: pointer;
+  color: cadetblue;
+  background-color: #ffff;
+  width: max-content;
+}
+
+.table-root{
+  padding: 10px;
+}
